@@ -2,7 +2,7 @@ import React from 'react'
 
 const Footer = () => {
   return (
-    <div>
+    <div className='mt-5'>
           <div className="row px-5 mx-auto text-center">
               <div className="col-md-4 ps-5 mt-2">
                   <h6 className="fw-bold text-uppercase mb-3">GET HELP</h6>
@@ -35,8 +35,6 @@ const Footer = () => {
                   © 2022 Cybersoft All Rights Reserved | Design Theme by Trương Tấn Khải.
               </p>
           </div>
-
-
     </div>
   )
 }

@@ -2,7 +2,7 @@ import React from 'react'
 
 const Image = () => {
     return (
-        <div id="carouselExampleInterval" className="carousel slide" data-bs-ride="carousel">
+        <div id="carouselExampleInterval" className="carousel slide" data-bs-ride="carousel ">
             <div className="carousel-inner">
                 <div className="carousel-item active" data-bs-interval={10000}>
                     <img src="https://cdn.hstatic.net/files/1000230642/file/1920x750_.png" className="d-block w-100" style={{height:'900px'}} alt="..." />
