@@ -32,29 +32,12 @@ const Products = () => {
           <p className="text-white-50 mb-0">Các sản phẩm giày thời trang nổi bật.</p>
         </div>
 
-        <div className="d-flex align-items-center gap-2">
-          <label htmlFor="favoriteFilter" className="text-white mb-0 fw-semibold">
-            Filter:
-          </label>
-          <select
-            id="favoriteFilter"
-            className="form-select form-select-sm"
-            value=''
-            
-            style={{ minWidth: 180 }}
-          >
-            <option value="all">All Products</option>
-            <option value="favorite">Favorites</option>
-            <option value="non-favorite">Non-favorites</option>
-          </select>
-        </div>
-      </div>
-
       <SanPham mangSanPham={mangSanPham}/>
       {/* <div className="row g-4">
         <SanPham mangSanPham={mangSanPham}/>
       </div> */}
     </div>
+  </div>
   )
 }
 
