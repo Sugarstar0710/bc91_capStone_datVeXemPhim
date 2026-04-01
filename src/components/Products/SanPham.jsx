@@ -1,4 +1,5 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 
 const SanPham = (props) => {
     const { mangSanPham } = props
@@ -14,7 +15,7 @@ const SanPham = (props) => {
                             style={{ objectFit: 'contain' }}
                         />
                         <span
-                            className={`position-absolute top-0 end-0 m-3 d-flex align-items-center justify-content-center rounded-circle `}
+                            className='position-absolute top-0 end-0 m-3 d-flex align-items-center justify-content-center rounded-circle bg-white text-dark border border-2 border-secondary'
                             style={{ width: 40, height: 40 }}
                         >
                             {/* ${
@@ -28,7 +29,7 @@ const SanPham = (props) => {
                         <p className="text-muted small mb-4">{sanPham.shortDescription}</p>
                         <div className="d-flex align-items-center justify-content-between mt-auto">
                             <div className="d-flex gap-2">
-                                <button className="btn btn-outline-secondary px-2 py-3" style={{fontSize:16}}>View detail</button>
+                                <NavLink to={`/detail/${sanPham.id}`} className="btn btn-outline-secondary px-2 py-3" style={{fontSize:16}}>View detail</NavLink>
                                 <button className="btn btn-warning btn-sm px-3 py-3 " style={{fontSize:16}}>Buy now</button>
                             </div>
                             <span className="badge bg-danger text-white py-3 px-3" style={{fontSize:16}}>${sanPham.price}</span>

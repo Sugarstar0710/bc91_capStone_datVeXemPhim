@@ -1,9 +1,10 @@
 ﻿import React from 'react'
+import { NavLink } from 'react-router-dom'
 
 const Carousel = (props) => {
     const {mangSanPham}= props
   return (
-    <div id="productCarousel" className="carousel slide mb-5" data-bs-ride="carousel" data-bs-interval="3000">
+    <div id="productCarousel" className="carousel slide mb-5 mt-2" data-bs-ride="carousel" data-bs-interval="3000">
       <div className="carousel-indicators mb-0 d-flex justify-content-center gap-2 py-3">
         <button
           type="button"
@@ -37,12 +38,12 @@ const Carousel = (props) => {
             <div className="col-md-6">
               <img
                 src={sanPham.image}
-                className="d-block w-100"
+                className="d-block w-75 ms-5"
                 alt={sanPham.name}
                 style={{ height: 420, objectFit: 'cover' }}
               />
             </div>
-            <div className="col-md-6 p-4">
+            <div className="col-md-6">
               <h1 className="mb-2">{sanPham.name}</h1>
               <p className="text-muted mb-3 fs-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vitae purus vitae dolor vehicula euismod.</p>
               <div className="mb-3 " style={{fontSize:18}}>
@@ -55,7 +56,7 @@ const Carousel = (props) => {
               <div className="d-flex align-items-center gap-3 mb-3">
                 <span className="fs-2 fw-bold text-danger">${sanPham.price}</span>
               </div>
-              <button type="button" className="btn btn-outline-secondary me-2 px-2 py-3 fs-5">View Detail</button>
+              <NavLink to={`/detail/${sanPham.id}`} className="btn btn-outline-secondary me-2 px-2 py-3 fs-5">View Detail</NavLink>
               <button type="button" className="btn btn-warning px-3 py-3 fs-5">Buy now</button>
             </div>
           </div>

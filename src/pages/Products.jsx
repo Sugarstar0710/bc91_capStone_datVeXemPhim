@@ -31,13 +31,9 @@ const Products = () => {
           <h2 className="text-white mb-1">Product Feature</h2>
           <p className="text-white-50 mb-0">Các sản phẩm giày thời trang nổi bật.</p>
         </div>
-
+      </div>
       <SanPham mangSanPham={mangSanPham}/>
-      {/* <div className="row g-4">
-        <SanPham mangSanPham={mangSanPham}/>
-      </div> */}
     </div>
-  </div>
   )
 }
 
