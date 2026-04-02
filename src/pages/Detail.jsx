@@ -16,7 +16,7 @@ const Detail = () => {
   },[params.id])
   return (
     <div className="container py-5">
-      <div className="row align-items-center gy-4">
+      <div className="row align-items-center g-5">
         <div className="col-lg-5">
           <div className="card border-0 shadow-sm">
             <img src={productDetail.image} className="card-img-top" alt="Product detail" style={{ objectFit: 'contain', height: 420, transform:rotate }} />
@@ -49,7 +49,7 @@ const Detail = () => {
         <div className="col-lg-7">
           <div className="pb-3 border-bottom mb-4">
             <h1 className="mb-3">{productDetail.name}</h1>
-            <p className="text-muted" style={{fontSize:18}}>{productDetail.description}</p>
+            <p className="text-muted" style={{fontSize:18}}>{productDetail.shortDescription}</p>
           </div>
           <div className="mb-2">
             <h6 className="text-uppercase text-success mb-3">Available size</h6>
@@ -81,7 +81,49 @@ const Detail = () => {
         </div>
       </div>
       <div className="mt-5">
-        <h5 className="mb-4 text-center">- Realate Product -</h5>
+        <h3 className="mb-4">Product Details</h3>
+        <div className="card border-1 shadow-sm p-3">
+          <div className="card-body">
+            <p className="text-muted mb-4">{productDetail.description}</p>
+            <div className="row g-2 mb-2">
+              <div className="col-12">
+                <div className="overflow-hidden d-flex justify-content-center align-items-center" style={{ minHeight: 200 }}>
+                  <img
+                    src={productDetail.image}
+                    className="w-75 h-50"
+                    style={{ objectFit: 'cover' }}
+                    alt={productDetail.name}
+                  />
+                </div>
+              </div>
+            </div>
+            <div>
+              <h4 className="fw-semibold mb-2">Lưu ý: </h4>
+              <p className="text-danger fs-5 fst-italic mb-3">* Shop chỉ bảo hành cho những sản phẩm lỗi do nhà sản xuất</p>
+              <ul className="list-unstyled mb-0" style={{fontSize: 16}}>
+                <li className="mb-2">
+                  <i className="fa-solid fa-circle-check text-success me-2"></i>
+                  Hoàn tiền nếu nhận sản phẩm không giống hình
+                </li>
+                <li className="mb-2">
+                  <i className="fa-solid fa-circle-check text-success me-2"></i>
+                  Đổi ngay hàng mới nếu nhận hàng bị lỗi, hỏng từ phía nhà sản xuất
+                </li>
+                <li className="mb-2">
+                  <i className="fa-solid fa-circle-check text-success me-2"></i>
+                  Hỗ trợ đổi hàng nếu các bạn đi không vừa
+                </li>
+                <li>
+                  <i className="fa-solid fa-circle-check text-success me-2"></i>
+                  Chat với shop để được tư vấn nếu cần nhé
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="mt-5">
+        <h3 className="mb-4 text-center">- Realate Product -</h3>
         <div className="row g-4">
           {productDetail.relatedProducts?.map((item,index)=>{
             return <div className="col-md-4" key={item.id ?? index}>
