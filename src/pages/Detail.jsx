@@ -2,30 +2,32 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getProductDetailActionThunk } from '../redux/reducer/ProductPageReducer'
 import { NavLink, useParams } from 'react-router-dom'
+import { themGioHang } from '../redux/reducer/BTGioHangReducer'
 const Detail = () => {
-  const params= useParams()
-  const {productDetail}= useSelector(rootState=> rootState.ProductPageReducer)
-  const dispatch= useDispatch()
-  const getProductDetailApi=async()=>{
+  const params = useParams()
+  const { productDetail } = useSelector(rootState => rootState.ProductPageReducer)
+  const dispatch = useDispatch()
+  const getProductDetailApi = async () => {
     dispatch(getProductDetailActionThunk(params.id))
   }
-  const [rotate,setRotate]= useState('rotate(0deg)')
-  const [size,setSize]= useState('32')
-  useEffect(()=>{
+  const [rotate, setRotate] = useState('rotate(0deg)')
+  const [size, setSize] = useState('32')
+  const [quantity, setQuantity] = useState(1);
+  useEffect(() => {
     getProductDetailApi()
-  },[params.id])
+  }, [params.id])
   return (
     <div className="container py-5">
       <div className="row align-items-center g-5">
         <div className="col-lg-5">
           <div className="card border-0 shadow-sm">
-            <img src={productDetail.image} className="card-img-top" alt="Product detail" style={{ objectFit: 'contain', height: 420, transform:rotate }} />
+            <img src={productDetail.image} className="card-img-top" alt="Product detail" style={{ objectFit: 'contain', height: 420, transform: rotate }} />
           </div>
           <div className="row row-cols-4 g-2 mt-3">
-            {productDetail.detaildetailedImages?.map((item,index)=>{
-              let className=`border-default`
-              if(item ==rotate){
-                className=`border-primary`
+            {productDetail.detaildetailedImages?.map((item, index) => {
+              let className = `border-default`
+              if (item == rotate) {
+                className = `border-primary`
               }
               return (
                 <div className="col" key={index}>
@@ -49,17 +51,17 @@ const Detail = () => {
         <div className="col-lg-7">
           <div className="pb-3 border-bottom mb-4">
             <h1 className="mb-3">{productDetail.name}</h1>
-            <p className="text-muted" style={{fontSize:18}}>{productDetail.shortDescription}</p>
+            <p className="text-muted" style={{ fontSize: 18 }}>{productDetail.shortDescription}</p>
           </div>
           <div className="mb-2">
             <h6 className="text-uppercase text-success mb-3">Available size</h6>
             <div className="d-flex flex-wrap gap-2">
-              {productDetail.size?.map((item,index)=>{
-                let className=`btn-outline-secondary`
-                if(item ==size){
-                  className=`btn-success`
+              {productDetail.size?.map((item, index) => {
+                let className = `btn-outline-secondary`
+                if (item == size) {
+                  className = `btn-success`
                 }
-                return <button key={index} type="button" style={{fontSize:16}} onClick={(e)=>{
+                return <button key={index} type="button" style={{ fontSize: 16 }} onClick={(e) => {
                   setSize(item)
                 }} className={`btn ${className} me-2 px-3 py-2`}>{item}</button>
               })}
@@ -71,13 +73,17 @@ const Detail = () => {
             </div>
             <div className="mb-3">
               <div className="input-group" style={{ width: 140 }}>
-                <button className="btn btn-outline-secondary" type="button">-</button>
-                <input type="text" className="form-control text-center" defaultValue={1} readOnly />
-                <button className="btn btn-outline-secondary" type="button">+</button>
+                <button className="btn btn-outline-secondary" type="button" onClick={(e) => setQuantity(quantity > 1 ? quantity - 1 : 1)}>-</button>
+                <input type="text" className="form-control text-center" value={quantity} readOnly />
+                <button className="btn btn-outline-secondary" type="button" onClick={(e) => setQuantity(quantity + 1)}>+</button>
               </div>
             </div>
           </div>
-          <button type="button" className="btn btn-primary px-4 my-2">Add to cart</button>
+          <button type="button" className="btn btn-primary px-4 my-2" onClick={(e) => {
+            const itemDetail = { ...productDetail, soLuong: quantity };
+            const action = themGioHang(itemDetail);
+            dispatch(action);
+          }}>Add to cart</button>
         </div>
       </div>
       <div className="mt-5">
@@ -91,8 +97,7 @@ const Detail = () => {
                   <img
                     src={productDetail.image}
                     className="w-75 h-50"
-                    style={{ objectFit: 'cover' }}
-                    alt={productDetail.name}
+                    style={{ objectFit: 'cover' }} alt=''
                   />
                 </div>
               </div>
@@ -100,7 +105,7 @@ const Detail = () => {
             <div>
               <h4 className="fw-semibold mb-2">Lưu ý: </h4>
               <p className="text-danger fs-5 fst-italic mb-3">* Shop chỉ bảo hành cho những sản phẩm lỗi do nhà sản xuất</p>
-              <ul className="list-unstyled mb-0" style={{fontSize: 16}}>
+              <ul className="list-unstyled mb-0" style={{ fontSize: 16 }}>
                 <li className="mb-2">
                   <i className="fa-solid fa-circle-check text-success me-2"></i>
                   Hoàn tiền nếu nhận sản phẩm không giống hình
@@ -125,7 +130,7 @@ const Detail = () => {
       <div className="mt-5">
         <h3 className="mb-4 text-center">- Realate Product -</h3>
         <div className="row g-4">
-          {productDetail.relatedProducts?.map((item,index)=>{
+          {productDetail.relatedProducts?.map((item, index) => {
             return <div className="col-md-4" key={item.id ?? index}>
               <div className="card border-0 shadow-sm h-100">
                 <div className="position-relative overflow-hidden bg-light" style={{ minHeight: 240 }}>
@@ -149,7 +154,10 @@ const Detail = () => {
                   <div className="d-flex align-items-center justify-content-between mt-auto">
                     <div className="d-flex gap-2">
                       <NavLink to={`/detail/${item.id}`} className="btn btn-outline-secondary px-2 py-3" style={{ fontSize: 16 }}>View detail</NavLink>
-                      <button className="btn btn-warning btn-sm px-3 py-3" style={{ fontSize: 16 }}>Buy now</button>
+                      <button className="btn btn-warning btn-sm px-3 py-3" style={{ fontSize: 16 }} onClick={(e) => {
+                        const action = themGioHang(productDetail)
+                        dispatch(action)
+                      }}>Buy now</button>
                     </div>
                     <span className="badge bg-danger text-white py-3 px-3" style={{ fontSize: 16 }}>${item.price}</span>
                   </div>

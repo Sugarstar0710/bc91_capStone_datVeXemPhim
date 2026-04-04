@@ -12,13 +12,6 @@ const Products = () => {
   useEffect(()=>{
     getAllProductApi()
   },[])
-  // const [filter, setFilter] = useState('all')
-
-  // const visibleProducts = useMemo(() => {
-  //   if (filter === 'favorite') return PRODUCTS.filter((product) => product.isFavorite)
-  //   if (filter === 'non-favorite') return PRODUCTS.filter((product) => !product.isFavorite)
-  //   return PRODUCTS
-  // }, [filter])
 
   return (
     <div className="container py-2">

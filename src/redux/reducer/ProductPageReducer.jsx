@@ -1,47 +1,58 @@
 import { createSlice } from '@reduxjs/toolkit'
-import axios from 'axios'
+import _ from 'lodash'
+import { httpClient } from '../../util/Config';
 const initialState = {
-    mangSanPham:[],
-    productDetail:{}
+    mangSanPham: [],
+    productDetail: {},
 }
 
 const ProductPageReducer = createSlice({
     name: "ProductPageReducer",
     initialState,
     reducers: {
-        setArrayProduct:(state,action)=>{
-            state.mangSanPham=action.payload
-        }, setProductDetail: (state,action)=>{
-            state.productDetail=action.payload
+        setArrayProduct: (state, action) => {
+            state.mangSanPham = action.payload
+        }, setProductDetail: (state, action) => {
+            state.productDetail = action.payload
+        },
+        sortPriceAsc:(state)=>{
+            state.mangSanPham = _.orderBy(state.mangSanPham,["price"], ["asc"])
+        },
+        sortPriceDesc: (state) => {
+            state.mangSanPham = _.orderBy(
+                state.mangSanPham,
+                ["price"],
+                ["desc"]
+            )
         }
     }
 });
 
-export const { setArrayProduct,setProductDetail } = ProductPageReducer.actions
+export const { setArrayProduct, setProductDetail, sortPriceAsc,sortPriceDesc} = ProductPageReducer.actions
 
 export default ProductPageReducer.reducer
 
 // ------------action thunk -----------------//
-export const getProductApi= ()=>{
-    return async(dispatch)=>{
-        try{
-            const res= await axios.get(`https://shop.cyberlearn.vn/api/Product`)
-            const actionPayLoad= setArrayProduct(res.data.content)
+export const getProductApi = () => {
+    return async (dispatch) => {
+        try {
+            const res = await httpClient.get(`/api/Product`)
+            const actionPayLoad = setArrayProduct(res.data.content)
             dispatch(actionPayLoad)
 
-        }catch(err){
+        } catch (err) {
             console.log(err)
         }
     }
 }
 
-export const getProductDetailActionThunk=(id)=>{
-    return async(dispatch)=>{
-        try{
-            const res= await axios.get(`https://apistore.cybersoft.edu.vn/api/Product/getbyid?id=${id}`)
-            const productDetail= setProductDetail(res.data.content)
+export const getProductDetailActionThunk = (id) => {
+    return async (dispatch) => {
+        try {
+            const res = await httpClient.get(`/api/Product/getbyid?id=${id}`)
+            const productDetail = setProductDetail(res.data.content)
             dispatch(productDetail)
-        }catch(err){
+        } catch (err) {
             console.log(err)
         }
     }
