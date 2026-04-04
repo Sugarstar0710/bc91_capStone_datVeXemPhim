@@ -1,121 +1,134 @@
-import React from 'react'
+import { useFormik } from 'formik'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import * as yup from 'yup'
+import { getProfileActionApiAsync } from '../redux/reducer/UserLoginReducer'
+import ModalUpdate from './HOCModal/ModalUpdate'
+import PageUpdate from './HOCModal/UpdateProfile/PageUpdate'
+import { useState } from 'react'
 
 const Profile = () => {
+    const [Component, setComponent]= useState(<PageUpdate/>)
+    const dispatch = useDispatch()
+    const { userProfile } = useSelector(rootState => rootState.UserLoginReducer)
+    const formFormikUserProfile = useFormik({
+        enableReinitialize: true,
+        initialValues: {
+            email: userProfile?.email || '',
+            name: userProfile?.name || '',
+            phone: userProfile?.phone || '',
+            password: userProfile?.password || '',
+            gender: userProfile?.gender === true ? 'true' : 'false'
+        }, onSubmit: (values) => {
+
+        }
+    })
+    useEffect(() => {
+        const actionThunk = getProfileActionApiAsync()
+        dispatch(actionThunk)
+    }, [dispatch])
     return (
         <div className="container mt-5 bg-light shadow-sm p-0">
             <div className="d-inline-block px-5 py-2 fw-bold text-white fs-4" style={{ background: 'linear-gradient(to right, #9d00ff, #4e00ff)', minWidth: 300 }}>
                 Profile
             </div>
             <div className="p-4">
-                <div className="row align-items-start mb-5">
-                    <div className="col-md-2 text-center">
-                        <img src="https://via.placeholder.com/120" className="rounded-circle bg-secondary-subtle img-fluid" alt="Avatar" />
+                <div className="row mb-5">
+                    <div className="col-4 text-center">
+                        <img src={userProfile?.avatar} alt="avatar" className='rounded-circle border' width={200} height={200} />
                     </div>
-                    <div className="col-md-10">
-                        <div className="row g-3">
-                            <div className="col-md-6">
-                                <label className="form-label text-secondary small mb-0">Email</label>
-                                <input type="text" className="form-control border-0 bg-light" placeholder="email" />
-                            </div>
-                            <div className="col-md-6">
-                                <label className="form-label text-secondary small mb-0">name</label>
-                                <input type="text" className="form-control border-0 bg-light" placeholder="name" />
-                            </div>
-                            <div className="col-md-6">
-                                <label className="form-label text-secondary small mb-0">Phone</label>
-                                <input type="text" className="form-control border-0 bg-light" placeholder="phone" />
-                            </div>
-                            <div className="col-md-6">
-                                <label className="form-label text-secondary small mb-0">password</label>
-                                <input type="password" className="form-control border-0 bg-light" placeholder="password" />
-                            </div>
-                            <div className="col-md-6 d-flex align-items-center pt-3">
-                                <span className="me-3 text-secondary">Gender</span>
-                                <div className="form-check form-check-inline">
-                                    <input className="form-check-input border-primary" type="radio" name="g" id="m" defaultChecked />
-                                    <label className="form-check-label small" htmlFor="m">Male</label>
+                    <div className="col-8">
+                        <form onSubmit={formFormikUserProfile.handleSubmit}>
+                            <div className="row">
+                                <div className="col-6">
+                                    <div className="form-group mb-2">
+                                        <p className="mb-1">Email</p>
+                                        <input className="form-control" name='email' value={formFormikUserProfile.values.email} onChange={formFormikUserProfile.handleChange} />
+                                    </div>
+                                    <div className="form-group mb-2">
+                                        <p className="mb-1">Phone</p>
+                                        <input className="form-control" name='phone' value={formFormikUserProfile.values.phone} onChange={formFormikUserProfile.handleChange} />
+                                    </div>
                                 </div>
-                                <div className="form-check form-check-inline">
-                                    <input className="form-check-input border-primary" type="radio" name="g" id="f" />
-                                    <label className="form-check-label small" htmlFor="f">Female</label>
+                                <div className="col-6">
+                                    <div className="form-group mb-2">
+                                        <p className="mb-1">Name</p>
+                                        <input className="form-control" name='name' value={formFormikUserProfile.values.name} onChange={formFormikUserProfile.handleChange} />
+                                    </div>
+                                    <div className="form-group mb-2">
+                                        <p className="mb-1">Password</p>
+                                        <input className="form-control" name='password' type='password' value={formFormikUserProfile.values.password} onChange={formFormikUserProfile.handleChange} />
+                                    </div>
+                                    <div className="form-group mb-2">
+                                        <p className="mb-1">Gender</p>
+                                        <div className="d-flex gap-4">
+                                            <div className="form-check">
+                                                <input className="form-check-input" type="radio" name="gender" id="genderMale" value="true" checked={formFormikUserProfile.values.gender === 'true'} onChange={formFormikUserProfile.handleChange} />
+                                                <label className="form-check-label" htmlFor="genderMale">Male</label>
+                                            </div>
+                                            <div className="form-check">
+                                                <input className="form-check-input" type="radio" name="gender" id="genderFemale" value="false" checked={formFormikUserProfile.values.gender === 'false'} onChange={formFormikUserProfile.handleChange} />
+                                                <label className="form-check-label" htmlFor="genderFemale">Female</label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="col-md-6 text-end pt-3">
-                                <button className="btn btn-primary rounded-pill px-5 fw-bold shadow-sm" style={{ backgroundColor: '#6610f2', border: 'none' }}>
-                                    Update
-                                </button>
+                            <div className='text-end mt-3'>
+                                <button type='submit' className='btn btn-primary rounded-pill px-4'  data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={(e)=>{
+                                    setComponent(<PageUpdate/>)
+                                }}>Update</button>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
+                <ModalUpdate title='Chỉnh sửa Profile' contentComponent={Component}/>
+
                 <div className="d-flex border-bottom mb-4">
-                    <div className="px-4 py-2 border-bottom border-3 border-danger text-danger fw-bold" style={{ cursor: 'pointer' }}>
-                        Order history
-                    </div>
-                    <div className="px-4 py-2 text-dark fw-bold" style={{ cursor: 'pointer' }}>
-                        Favourite
-                    </div>
+                    <div className="px-4 py-2 border-bottom border-3 border-danger text-danger fw-bold" style={{ cursor: 'pointer' }}>Order history</div>
                 </div>
+
                 <div className="order-list">
-                    <div className="mb-5">
-                        <p className="text-danger fw-semibold mb-2">+ Orders have been placed on 09 - 19 - 2020</p>
-                        <div className="table-responsive">
-                            <table className="table align-middle text-center">
-                                <thead className="table-secondary text-secondary">
-                                    <tr>
-                                        <th>id</th>
-                                        <th>img</th>
-                                        <th>name</th>
-                                        <th>price</th>
-                                        <th>quantity</th>
-                                        <th>total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td><img src="https://via.placeholder.com/50" className="img-thumbnail border-0" alt="shoe" /></td>
-                                        <td>Product 1</td>
-                                        <td>1000</td>
-                                        <td><span className="bg-light border px-3 py-1 text-secondary">1</span></td>
-                                        <td>1000</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div>
-                        <p className="text-danger fw-semibold mb-2">+ Orders have been placed on 09 - 19 - 2020</p>
-                        <div className="table-responsive">
-                            <table className="table align-middle text-center">
-                                <thead className="table-secondary text-secondary">
-                                    <tr>
-                                        <th>id</th>
-                                        <th>img</th>
-                                        <th>name</th>
-                                        <th>price</th>
-                                        <th>quantity</th>
-                                        <th>total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td><img src="https://via.placeholder.com/50" className="img-thumbnail border-0" alt="shoe" /></td>
-                                        <td>Product 1</td>
-                                        <td>1000</td>
-                                        <td><span className="bg-light border px-3 py-1 text-secondary">1</span></td>
-                                        <td>1000</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    {userProfile?.ordersHistory?.map((order, index) => {
+                        return (
+                            <div className="mb-5" key={order.id}>
+                                <p className="text-danger fw-semibold mb-2">
+                                    + Orders have been placed on {new Date(order.date).toLocaleDateString()}
+                                </p>
+                                <div className="table-responsive">
+                                    <table className="table align-middle text-center border">
+                                        <thead className="table-secondary text-secondary">
+                                            <tr>
+                                                <th>id</th>
+                                                <th>img</th>
+                                                <th>name</th>
+                                                <th>price</th>
+                                                <th>quantity</th>
+                                                <th>total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {order.orderDetail?.map((item, itemindex) => {
+                                                return (
+                                                    <tr key={itemindex}>
+                                                        <td>{order.id}</td>
+                                                        <td><img src={item.image} width={50} alt="shoe" /></td>
+                                                        <td className="text-primary fw-bold">{item.name}</td>
+                                                        <td>${item.price.toLocaleString()}</td>
+                                                        <td>{item.quantity}</td>
+                                                        <td className="fw-bold">${(item.price * item.quantity).toLocaleString()}</td>
+                                                    </tr>
+                                                )
+                                            })}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        )
+                    })}
                 </div>
             </div>
         </div>
-
-
     )
 }
 

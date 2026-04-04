@@ -151,7 +151,7 @@ const Register = () => {
                             type="radio"
                             name="gender"
                             id="genderFemale"
-                            value="female" checked={userRegisterForm.values.gender === false}
+                            value="false" checked={userRegisterForm.values.gender === false}
                             onChange={() => userRegisterForm.setFieldValue("gender", false)}
                           />
                           <label className="form-check-label" htmlFor="genderFemale">

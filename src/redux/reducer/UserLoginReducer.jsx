@@ -6,7 +6,8 @@ let userLoginDefaut = getLocalStorageString(USSERLOGIN)
 let accessTokenDefault = getLocalStorageString(ACCESSTOKEN)
 const initialState = {
   userLogin: userLoginDefaut,
-  accessToken: accessTokenDefault
+  accessToken: accessTokenDefault,
+  userProfile: null
 }
 
 const UserLoginReducer = createSlice({
@@ -16,11 +17,14 @@ const UserLoginReducer = createSlice({
     loginAction:(state,action)=>{
       state.userLogin= action.payload.userLogin
       state.accessToken= action.payload.accessToken
+    }, 
+    getProfileAction:(state,action)=>{
+      state.userProfile= action.payload
     }
   }
 });
 
-export const {loginAction} = UserLoginReducer.actions
+export const {loginAction, getProfileAction} = UserLoginReducer.actions
 
 export default UserLoginReducer.reducer
 
@@ -58,6 +62,19 @@ export const regiterActionApiAsync= (userRegister)=>{
       history.push('/login')
     }catch(err){
       alert (err.response?.data?.message)
+    }
+  }
+}
+
+export const getProfileActionApiAsync= ()=>{
+  return async (dispatch)=>{
+    try{
+      const res= await httpClient.post('/api/Users/getProfile')
+      const payload = res.data?.content 
+      const action= getProfileAction(payload)
+      dispatch(action)
+    }catch(err){
+      alert(err.response?.data?.message)
     }
   }
 }
