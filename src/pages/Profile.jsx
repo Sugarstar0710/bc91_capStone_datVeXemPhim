@@ -6,11 +6,21 @@ import { getProfileActionApiAsync } from '../redux/reducer/UserLoginReducer'
 import ModalUpdate from './HOCModal/ModalUpdate'
 import PageUpdate from './HOCModal/UpdateProfile/PageUpdate'
 import { useState } from 'react'
-
+import { history } from '../main'
+import { notification, Button } from 'antd';
 const Profile = () => {
-    const [Component, setComponent]= useState(<PageUpdate/>)
+    const [Component, setComponent] = useState(<PageUpdate />)
     const dispatch = useDispatch()
-    const { userProfile } = useSelector(rootState => rootState.UserLoginReducer)
+    const { userProfile, userLogin } = useSelector(rootState => rootState.UserLoginReducer)
+    const [api, contextHolder] = notification.useNotification();
+    if (!userLogin) {
+        return (
+            <div className="container py-5 text-center">
+                {contextHolder}
+                <h3>Bạn cần đăng nhập để được xem chi tiết profile!</h3>
+            </div>
+        )
+    }
     const formFormikUserProfile = useFormik({
         enableReinitialize: true,
         initialValues: {
@@ -24,11 +34,30 @@ const Profile = () => {
         }
     })
     useEffect(() => {
-        const actionThunk = getProfileActionApiAsync()
-        dispatch(actionThunk)
-    }, [dispatch])
+        if (userLogin) {
+            const actionThunk = getProfileActionApiAsync()
+            dispatch(actionThunk)
+        } else {
+            api.warning({
+                message: <span style={{ fontSize: 20, fontWeight: 'bold' }}>Yêu cầu đăng nhập</span>,
+                description: <div style={{ fontSize: 18 }}>
+                    Bạn cần phải đăng nhập tài khoản để thực hiện mua sản phẩm này.
+                </div>,
+                placement: 'topRight',
+                duration: 0,
+                btn: (
+                    <button className="btn btn-primary btn-sm" style={{ padding: '8px 20px', fontSize: 16 }} onClick={() => {
+                        api.destroy(key); // Đóng thông báo hiện tại
+                        history.push('/login'); // Chuyển hướng sang trang login
+                    }}>Login Now
+                    </button>
+                ),
+            })
+        }
+    }, [userLogin])
     return (
         <div className="container mt-5 bg-light shadow-sm p-0">
+            {contextHolder}
             <div className="d-inline-block px-5 py-2 fw-bold text-white fs-4" style={{ background: 'linear-gradient(to right, #9d00ff, #4e00ff)', minWidth: 300 }}>
                 Profile
             </div>
@@ -75,14 +104,14 @@ const Profile = () => {
                                 </div>
                             </div>
                             <div className='text-end mt-3'>
-                                <button type='submit' className='btn btn-primary rounded-pill px-4'  data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={(e)=>{
-                                    setComponent(<PageUpdate/>)
+                                <button type='submit' className='btn btn-primary rounded-pill px-4' data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={(e) => {
+                                    setComponent(<PageUpdate />)
                                 }}>Update</button>
                             </div>
                         </form>
                     </div>
                 </div>
-                <ModalUpdate title='Chỉnh sửa Profile' contentComponent={Component}/>
+                <ModalUpdate title='Chỉnh sửa Profile' contentComponent={Component} />
 
                 <div className="d-flex border-bottom mb-4">
                     <div className="px-4 py-2 border-bottom border-3 border-danger text-danger fw-bold" style={{ cursor: 'pointer' }}>Order history</div>
