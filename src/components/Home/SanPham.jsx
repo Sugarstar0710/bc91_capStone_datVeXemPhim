@@ -15,7 +15,14 @@ const SanPham = () => {
                     <p className="card-text opacity-50">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
                 </div>
                 <div className="d-flex w-100 border-0">
-                    <button className="btn border-0 py-2 rounded-0 fw-medium" style={{ backgroundColor: '#dfae63', color: 'white', width: '200px' }}>
+                    <button
+                        className="btn border-0 py-2 rounded-0 fw-medium"
+                        style={{
+                            backgroundColor: '#dfae63',
+                            color: 'white',
+                            width: '200px'
+                        }}
+                    >
                         Buy now
                     </button>
                     <div className="bg-light d-flex align-items-center justify-content-center px-3 border-start fw-bold" style={{ width: '200px', backgroundColor: '#e9ecef !important' }}>
