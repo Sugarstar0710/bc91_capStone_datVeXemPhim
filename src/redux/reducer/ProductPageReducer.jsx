@@ -36,7 +36,7 @@ export default ProductPageReducer.reducer
 export const getProductApi = () => {
     return async (dispatch) => {
         try {
-            const res = await httpClient.get(`/api/Product`)
+            const res = await httpClient.get('/api/Product')
             const actionPayLoad = setArrayProduct(res.data.content)
             dispatch(actionPayLoad)
 
