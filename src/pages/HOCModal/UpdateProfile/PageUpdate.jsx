@@ -74,6 +74,7 @@ const PageUpdate = () => {
                     </div>
                 </div>
             </form>
+            
         </div>
 
     )
